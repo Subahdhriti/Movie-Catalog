@@ -36,17 +36,17 @@ public class MovieCatalogController {
 //
 //        );
 
-        UserRating movieRatings =  restTemplate.getForObject("http://localhost:8082/ratingsdata/users/" + userId, UserRating.class);
+        UserRating movieRatings =  restTemplate.getForObject("http://movie-rating-service/ratingsdata/users/" + userId, UserRating.class);
 
 
         //For each movie Id, call movie-info-service and get details
         return  movieRatings.getMovieRatingList().stream().map(movieRating -> {
             //Calling through RestTemplate
-            //MovieInfo movieInfo =  restTemplate.getForObject("http://localhost:8081/movies/" + movieRating.getMovieId(), MovieInfo.class);
+            //MovieInfo movieInfo =  restTemplate.getForObject("http://movie-info-service/movies/" + movieRating.getMovieId(), MovieInfo.class);
             //Calling through WebClient
             MovieInfo movieInfo = wcBuilder.build()
                     .get()
-                    .uri("http://localhost:8081/movies/" + movieRating.getMovieId())
+                    .uri("http://movie-info-service/movies/" + movieRating.getMovieId())
                     .retrieve()
                     .bodyToMono(MovieInfo.class)
                     .block();
